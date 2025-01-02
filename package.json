@@ -12,9 +12,9 @@
     "@next/font": "13.4.13",
     "@openzeppelin/contracts": "^4.9.3",
     "ethers": "^5.7.2",
-    "next": "13.4.13",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "next": "^13.4.13",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-icons": "^4.10.1",
     "web3modal": "^1.9.9"
   },
