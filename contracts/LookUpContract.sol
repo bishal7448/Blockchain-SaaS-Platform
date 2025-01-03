@@ -74,5 +74,104 @@ contract LookUpContract {
         return items;
     }
 
-    
+    function getERC20Token(uint256 _tokenID) external view returns (
+        uint256,
+        address,
+        string memory,
+        string memory,
+        string memory,
+        string memory,
+        string memory,
+        string memory){
+            ERC20Token memory erc20Token = erc20Tokens[_tokenID];
+            return (
+                erc20Token.tokenID,
+                erc20Token.owner,
+                erc20Token.tokenSupply,
+                erc20Token.tokenName,
+                erc20Token.tokenSymbol,
+                erc20Token.tokenAddress,
+                erc20Token.tokenTransactionHash,
+                erc20Token.tokenCreatedDate
+            );
+        }
+
+
+    function getUserERC20Tokens(address _user) external view returns (ERC20Token[] memory) {
+            uint256 totalItemCount = _tokenIndex;
+            unit256 itemCount = 0;
+            uint currentyIndex = 0;
+
+            ERC20Token[] memory items = new ERC20Token[](itemCount);
+
+            for (uint256 i = 0; i < totalItemCount; i++) {
+                if(erc20Tokens[i + 1].owner == _user) {
+                    itemCount++;
+                }
+            }
+
+            for (uint256 i = 0; i < totalItemCount; i++) {
+                if(erc20Tokens[i + 1].owner == _user) {
+                    uint256 currentId = i + 1;
+                    ERC20Token storage currenItem = erc20Tokens[currentId];
+                    items[currentyIndex] = currenItem;
+                    currentyIndex++;
+                }
+            }
+
+            return items;
+        }
+
+    function getERC20TokenListingPrice() public view returns (unit256) {
+        return listingPrice;
+    }
+
+    function updateListingPrice(unit256 _listingPrice, address owner) public payable onlyOwner {
+        require(
+            contractOwner == owner,
+            "Only owner of this contract can change the listing price."
+        );
+        listingPrice = _listingPrice;
+    }
+
+    function withdraw() external onlyOwner {
+        uint256 balance = address(this).balance;
+        require(balance > 0, "Contract has no balance to withdraw.");
+        payable(contractOwner).transfer(balance);
+    }
+
+    function getContractBalance() external view onlyOwner returns (unit256) {
+        uint256 balance = address(this).balance;
+        return balance;
+
+        // return address(this).balance;
+    }
+
+    function donate() external payable {
+        require(msg.value > 0, "Donation amount must be greater than 0.");
+        _donationIndex++;
+        uint256 _donationID = _donationIndex;
+        Donation storage donation = donations[_donationID];
+        donation.donationID = _donationID;
+        donation.donor = msg.sender;
+        donation.fund = msg.value;
+
+        emit DonationReceived(msg.sender, msg.value);
+    }
+
+    function getAllDonation() public view returns (Donation[] memory) {
+        uint256 itemCount = _donationIndex;
+        uint currentyIndex = 0;
+
+        Donation[] memory items = new Donation[](itemCount);
+
+        for (unit256 i = 0; i < itemCount; i++) {
+            uint256 currentId = i + 1;
+            Donation storage currenItem = donations[currentId];
+            items[currentyIndex] = currenItem;
+            currentyIndex++;
+        }
+
+        return items;
+    }
 }
