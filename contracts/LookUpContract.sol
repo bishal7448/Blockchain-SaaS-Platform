@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 contract LookUpContract {
 
-    struct ERC20 {
+    struct ERC20Token {
         uint256 tokenID;
         address owner;
         string tokenSupply;
@@ -22,7 +22,7 @@ contract LookUpContract {
 
     address payable contractOwner = payable(0xE527F7b4339034B1De00099fa8D634D367eC0F75);
 
-    unit256 public listingPrice = 0.025 ether;
+    uint256 public listingPrice = 0.025 ether;
     mapping (uint256 => ERC20Token) private erc20Tokens;
     mapping (uint256 => Donation) private donations;
     uint256 public _tokenIndex;
@@ -39,10 +39,10 @@ contract LookUpContract {
         _;
     }
 
-    function createERC20Token(address _owner, string memory _tokenSupply, string memory _tokenName, string memory _tokenSymbol, string memory _tokenAddress, string memory _tokenTransactionHash, string memory _tokenCreatedDate) payable external returns (unit256, address, string memory, string memory, string memory, string memory ) {
+    function createERC20Token(address _owner, string memory _tokenSupply, string memory _tokenName, string memory _tokenSymbol, string memory _tokenAddress, string memory _tokenTransactionHash, string memory _tokenCreatedDate) payable external returns (uint256, address, string memory, string memory, string memory, string memory ) {
         _tokenIndex++;
-        unit256 _tokenId = _tokenIndex;
-        ERCToken storage erc20Token = erc20Tokens[_tokenId];
+        uint256 _tokenId = _tokenIndex;
+        ERC20Token storage erc20Token = erc20Tokens[_tokenId];
 
         erc20Token.tokenID = _tokenId;
         erc20Token.owner = _owner;
@@ -64,7 +64,7 @@ contract LookUpContract {
 
         ERC20Token[] memory items = new ERC20Token[](itemCount);
 
-        for (unit256 i = 0; i < itemCount; i++) {
+        for (uint256 i = 0; i < itemCount; i++) {
             uint256 currentId = i + 1;
             ERC20Token storage currenItem = erc20Tokens[currentId];
             items[currentyIndex] = currenItem;
@@ -99,8 +99,8 @@ contract LookUpContract {
 
     function getUserERC20Tokens(address _user) external view returns (ERC20Token[] memory) {
             uint256 totalItemCount = _tokenIndex;
-            unit256 itemCount = 0;
-            uint currentyIndex = 0;
+            uint256 itemCount = 0;
+            uint256 currentyIndex = 0;
 
             ERC20Token[] memory items = new ERC20Token[](itemCount);
 
@@ -122,11 +122,11 @@ contract LookUpContract {
             return items;
         }
 
-    function getERC20TokenListingPrice() public view returns (unit256) {
+    function getERC20TokenListingPrice() public view returns (uint256) {
         return listingPrice;
     }
 
-    function updateListingPrice(unit256 _listingPrice, address owner) public payable onlyOwner {
+    function updateListingPrice(uint256 _listingPrice, address owner) public payable onlyOwner {
         require(
             contractOwner == owner,
             "Only owner of this contract can change the listing price."
@@ -140,7 +140,7 @@ contract LookUpContract {
         payable(contractOwner).transfer(balance);
     }
 
-    function getContractBalance() external view onlyOwner returns (unit256) {
+    function getContractBalance() external view onlyOwner returns (uint256) {
         uint256 balance = address(this).balance;
         return balance;
 
@@ -161,11 +161,11 @@ contract LookUpContract {
 
     function getAllDonation() public view returns (Donation[] memory) {
         uint256 itemCount = _donationIndex;
-        uint currentyIndex = 0;
+        uint256 currentyIndex = 0;
 
         Donation[] memory items = new Donation[](itemCount);
 
-        for (unit256 i = 0; i < itemCount; i++) {
+        for (uint256 i = 0; i < itemCount; i++) {
             uint256 currentId = i + 1;
             Donation storage currenItem = donations[currentId];
             items[currentyIndex] = currenItem;
